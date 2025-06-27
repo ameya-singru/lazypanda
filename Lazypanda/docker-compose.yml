@@ -1,23 +1,17 @@
-version: '3.9'
 services:
   mongo:
-    image: mongo:4.4
-    volumes:
-      - mongo-data:/data/db
+    image: arm32v7/mongo
+    ports:
+      - "27017:27017"
   backend:
     build: ./backend
     ports:
       - "5000:5000"
-    depends_on:
-      - mongo
-    environment:
-      MONGO_URI: mongodb://mongo:27017/lazypanda
-      JWT_SECRET: supersecret
+    depends_on: [mongo]
   frontend:
     build: ./frontend
     ports:
       - "3000:3000"
-    depends_on:
-      - backend
+    depends_on: [backend]
 volumes:
-  mongo-data:
+  - mongo-data:/data/db
